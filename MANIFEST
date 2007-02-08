@@ -7,3 +7,7 @@ lib/Text/Sentence/Alignment.pm
 t/00-load.t
 t/01-global_align.t
 t/02-local_align.t
+t/03-align_strategy.t
+t/boilerplate.t
+t/pod-coverage.t
+t/pod.t

@@ -1,15 +1,7 @@
-Text-Sentence-Alignment - Two Sentence Alignment
+Text-Sentence-Alignment - Pair Sentence Alignment
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
-
-A README file is required for CPAN modules since CPAN extracts the README
-file from a module distribution so that people browsing the archive
-can use it get an idea of the modules uses. It is usually a good idea
-to provide version information here so that people can decide whether
-fixes for the module are worth downloading.
+This module is used to do sequence alignment on sentences. 
+Currently only pair-wise alignment algorithms are supported.
 
 INSTALLATION
 
@@ -25,7 +17,7 @@ COPYRIGHT AND LICENCE
 
 Put the correct copyright and licence information here.
 
-Copyright (C) 2005 Cheng-Lung Sung
+Copyright (C) 2005 - 2007 Cheng-Lung Sung
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

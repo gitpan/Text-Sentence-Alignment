@@ -1,5 +1,7 @@
 Revision history for Text-Sentence-Alignment
 
+0.10    [Feb 6 2007]
+        Revised version in OO way, pass all the tests.
+
 0.01    [Apr 12 2005]
         First version, released on an unsuspecting world.
-
