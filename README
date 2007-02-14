@@ -1,23 +1,53 @@
-Text-Sentence-Alignment - Pair Sentence Alignment
+NAME
+    Text::Sentence::Alignment - Two Sentence Alignment
 
-This module is used to do sequence alignment on sentences. 
-Currently only pair-wise alignment algorithms are supported.
+VERSION
+    Version 0.11
 
-INSTALLATION
+SYNOPSIS
+    This Module process two sentences (i.e. terms separated by space)
+    alignment. Now it provide two kind of alignment method, Global and Local
+    Alignment.
 
-To install this module, run the following commands:
+        use Text::Sentence::Alignment;
 
-    perl Makefile.PL
-    make
-    make test
-    make install
+        my $TSA = Text::Sentence::Alignment->new();
 
+        # local alignment
+        $TSA->is_local(1);
+        my ($result1,$result2) = $TSA->do_alignment($s1,$s2); 
 
-COPYRIGHT AND LICENCE
+        # global alignment
+        $TSA->is_local(0);
+        my ($result1,$result2) = $TSA->do_alignment($s1,$s2); 
 
-Put the correct copyright and licence information here.
+FUNCTIONS
+  new
+  is_local
+    Set/get if current algorithm is local alignment
 
-Copyright (C) 2005 - 2007 Cheng-Lung Sung
+  delimeter
+    The delimeter() is used to set delimeter of word/tags.
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+  do_alignment
+  calculate_matrix
+  similarity_print
+  get_align_result
+AUTHOR
+    Cheng-Lung Sung, "<clsung@cpan.org>"
+
+BUGS
+    Please report any bugs or feature requests to
+    "bug-text-sentence-alignment@rt.cpan.org", or through the web interface
+    at
+    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Text-Sentence-Alignment>
+    . I will be notified, and then you'll automatically be notified of
+    progress on your bug as I make changes.
+
+ACKNOWLEDGEMENTS
+COPYRIGHT & LICENSE
+    Copyright 2005 - 2007 Cheng-Lung Sung, All Rights Reserved.
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+

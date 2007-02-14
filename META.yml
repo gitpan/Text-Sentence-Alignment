@@ -1,12 +1,20 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Text-Sentence-Alignment
-version:      0.10
-version_from: lib/Text/Sentence/Alignment.pm
-installdirs:  site
+---
+name: Text-Sentence-Alignment
+version: 0.11
+author:
+  - 'Cheng-Lung Sung <clsung@cpan.org>'
+abstract: Two Sentence Alignment
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
 requires:
-    List::Util:                    0
-    Test::More:                    0
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.30
+  List::Util: 0
+  Test::More: 0
+provides:
+  Text::Sentence::Alignment:
+    file: lib/Text/Sentence/Alignment.pm
+    version: 0.11
+generated_by: Module::Build version 0.2806
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2

@@ -10,11 +10,11 @@ Text::Sentence::Alignment - Two Sentence Alignment
 
 =head1 VERSION
 
-Version 0.10
+Version 0.11
 
 =cut
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 =head1 SYNOPSIS
 
@@ -33,12 +33,6 @@ Now it provide two kind of alignment method, Global and Local Alignment.
     $TSA->is_local(0);
     my ($result1,$result2) = $TSA->do_alignment($s1,$s2); 
 
-=head1 BUILD-IN VARIABLES
-
-=cut 
-
-my ($len_s1, $len_s2) = (0,0); # length of s1/s2
-
 =head1 FUNCTIONS
 
 =cut 
@@ -51,23 +45,40 @@ sub new {
     my $class = shift;
     my $self = {};
     $self->{IS_LOCAL} = 0; # 0 for global alignment
+    $self->{DELIMETER} = '/'; # / for split tags
     $self->{TABLE} = (); # Dynamic Programming Table
     $self->{BEST} = (); # Best path, for local
     $self->{max_len} = 0; # for global
     $self->{SENARR1} = [];
     $self->{SENARR2} = [];
+    $self->{has_tag} = 0; # if we need to do hierarchy match, 
+			  # e.g. POS, semantic tags
     bless($self, $class);
     return($self);
 }
 
 =head2 is_local
     
+Set/get if current algorithm is local alignment
+
 =cut
 
 sub is_local {
     my $self = shift;
     if (@_) { $self->{IS_LOCAL} = shift }
     return $self->{IS_LOCAL}
+}
+
+=head2 delimeter
+
+The delimeter() is used to set delimeter of word/tags.
+
+=cut
+
+sub delimeter {
+    my $self = shift;
+    if (@_) { $self->{DELIMETER} = shift }
+    return $self->{DELIMETER}
 }
 
 =head2 do_alignment
@@ -78,17 +89,16 @@ sub do_alignment {
     my $self = shift;
     my $sen1 = shift;
     my $sen2 = shift;
-#    my @sa1 = split / /,$sen1;
-#    my @sa2 = split / /,$sen2;
-#    print STDERR $sen1. "\n";
     @{ $self->{SENARR1} } = split / /,$sen1;
     @{ $self->{SENARR2} } = split / /,$sen2;
-#    @{ $self->{SENARR2} } = @sa2;
+    if ($sen1 =~ m/$self->{DELIMETER}/ or 
+	$sen2 =~ m/$self->{DELIMETER}/) {
+	$self->{has_tag} = 1;
+    }
     $self->{TABLE} = ();
     $self->{BEST} = ();
     $self->{BEST}{MAX} = 0;
     $self->{TABLE}{0}{0} = 0;
-    ($len_s1, $len_s2) = (0,0);
     calculate_matrix($self);
 #    similarity_print();
     return get_align_result($self);
@@ -107,6 +117,8 @@ sub calculate_matrix {
     } else {
 	$self->{max_len} = scalar(@sa1) > scalar(@sa2) ? scalar(@sa1): scalar(@sa2); # for global
     }
+    my ($len_s1, $len_s2) = (0,0); # length of s1/s2
+
 #    print STDERR "max_len is ".$max_len."\n";
     while ($len_s1 <= (scalar @sa1)) {
 	while ($len_s2 <= scalar @sa2) {
@@ -115,8 +127,12 @@ sub calculate_matrix {
 		# if match, we add 1 for local, 0 for global
 		# else (not matched), we add -1 for local, 1 for global
 		$candidate1 = int($self->{TABLE}{$len_s1-1}{$len_s2-1}) + 
-		    (   $self->{IS_LOCAL} ? 1: -1) *
-		    ( ( $sa1[$len_s1-1] eq $sa2[$len_s2-1] )? 1+(-1+$self->{IS_LOCAL}) : -1 )
+		    ( $self->{IS_LOCAL} ? 1: -1) *
+			( $self->{has_tag} ? 
+			    how_similar($sa1[$len_s1-1], $sa2[$len_s2-1]) :
+			    ( ( $sa1[$len_s1-1] eq $sa2[$len_s2-1] ) ? 
+				1+(-1+$self->{IS_LOCAL}) : -1 )
+			)
 		;
 	    }
 	    if ($len_s1 > 0) {

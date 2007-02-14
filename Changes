@@ -1,5 +1,8 @@
 Revision history for Text-Sentence-Alignment
 
+0.11    [Feb 14 2007]
+        Use Build.PL now, also pet Kwalitee.
+
 0.10    [Feb 6 2007]
         Revised version in OO way, pass all the tests.
 
