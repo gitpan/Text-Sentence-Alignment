@@ -2,14 +2,14 @@
 use ExtUtils::MakeMaker;
 WriteMakefile
 (
+          'PL_FILES' => {},
+          'INSTALLDIRS' => 'site',
           'NAME' => 'Text::Sentence::Alignment',
+          'EXE_FILES' => [],
           'VERSION_FROM' => 'lib/Text/Sentence/Alignment.pm',
           'PREREQ_PM' => {
-                           'List::Util' => '0',
-                           'Test::More' => '0'
-                         },
-          'INSTALLDIRS' => 'site',
-          'EXE_FILES' => [],
-          'PL_FILES' => {}
+                           'Test::More' => 0,
+                           'List::Util' => 0
+                         }
         )
 ;

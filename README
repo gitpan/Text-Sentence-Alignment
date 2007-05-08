@@ -2,7 +2,7 @@ NAME
     Text::Sentence::Alignment - Two Sentence Alignment
 
 VERSION
-    Version 0.11
+    Version 0.12
 
 SYNOPSIS
     This Module process two sentences (i.e. terms separated by space)

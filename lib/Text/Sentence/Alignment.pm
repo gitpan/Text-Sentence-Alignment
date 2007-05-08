@@ -10,11 +10,11 @@ Text::Sentence::Alignment - Two Sentence Alignment
 
 =head1 VERSION
 
-Version 0.11
+Version 0.12
 
 =cut
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 =head1 SYNOPSIS
 
@@ -194,6 +194,7 @@ sub get_align_result {
     my ($i, $j) = (0, 0);
     my (@as1, @as2);
     my $baseline = 0;
+    my $first_round = 0;
     if ($self->{IS_LOCAL}) {
 	$i = $self->{BEST}{X};
 	$j = $self->{BEST}{Y};
@@ -201,28 +202,48 @@ sub get_align_result {
 	$i = scalar @sa1;
 	$j = scalar @sa2;
     }
-    while ( $self->{TABLE}{$i}{$j} > 0) {
+    my $pi = $i + 2;
+    my $pj = $j + 2;
+    do { 
+	if ($first_round) {
+	    push @as1, $sa1[$i];
+	    push @as2, $sa2[$j];
+	    $first_round = 0;
+	} else {
+	    if ($i == ($pi-1)) {
+		push @as1, $sa1[$i];
+	    }
+	    elsif ($i == $pi) {
+		push @as1, "-";
+	    }
+	    if ($j == ($pj-1)) {
+		push @as2, $sa2[$j];
+	    }
+	    elsif ($j == $pj) {
+		push @as2, "-";
+	    }
+	}
+	$pi = $i;
+	$pj = $j;
 	if ($self->{IS_LOCAL}) { 
 	    $baseline = max($self->{TABLE}{$i-1}{$j-1},$self->{TABLE}{$i-1}{$j},$self->{TABLE}{$i}{$j-1});
 	} else {
 	    $baseline = min($self->{TABLE}{$i-1}{$j-1},$self->{TABLE}{$i-1}{$j},$self->{TABLE}{$i}{$j-1});
 	}
 	if ($self->{TABLE}{$i-1}{$j-1} == $baseline) {
-	    push @as1, $sa1[$i-1];
-	    push @as2, $sa2[$j-1];
 	    $i--;
 	    $j--;
 	} elsif ($self->{TABLE}{$i}{$j-1} == $baseline) {
-	    push @as1, "-"; # gap
-	    push @as2, $sa2[$j-1];
 	    $j--;
 	} elsif ($self->{TABLE}{$i-1}{$j} == $baseline) {
-	    push @as1, $sa1[$i-1];
-	    push @as2, "-"; # gap
 	    $i--;
 	} else {
 	    die $!;
 	}
+    } while ( $self->{TABLE}{$pi}{$pj} > 0 and $i >0 and $j > 0);
+    if (!$self->{IS_LOCAL}) {
+	push @as1, $sa1[$i];
+	push @as2, $sa2[$j];
     }
     return ( join (" ",reverse @as1)."\t".join (" ",reverse @as2) );
 }
